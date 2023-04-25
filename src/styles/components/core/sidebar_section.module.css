@@ -1,16 +1,18 @@
-.parent {
-    position: relative;
-}
-
 .background {
-    opacity: 0;
-    @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10
-}
-
-.background_selected {
-    @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10 opacity-50
+    @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10 opacity-0
 }
 
 button:hover .background {
     opacity: 0.5;
+}
+
+.background_selected {
+    @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10
+}
+
+.selectable_text {
+    @apply text-left text-admin-text-secondary hover:text-admin-text
+}
+.selected_text {
+    @apply text-left font-bold
 }

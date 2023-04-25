@@ -9,9 +9,11 @@ module.exports = {
     extend: {
       colors: {
         "admin-primary": "#576CA8",
+        "admin-secondary": "#274690",
         "admin-primary-background": "#1D1F25",
         "admin-secondary-background": "#272A30",
-        "admin-text": "#F5F3F5"
+        "admin-text": "#F5F3F5",
+        "admin-text-secondary": "#A7ABB0"
       }
     },
   },
