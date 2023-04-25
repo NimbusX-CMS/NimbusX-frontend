@@ -1,4 +1,5 @@
 import SidebarSection from "@/components/core/sidebar_section";
+import Button from "@/components/core/button";
 
 export default function Sidebar() {
     return (
@@ -8,8 +9,9 @@ export default function Sidebar() {
                 <span className="text-sm ml-2">v1.0.0-SNAPSHOT</span>
             </div>
 
-            <div className="p-4">
-                <SidebarSection title="DreamStudio App" selected={true} />
+            <div className="flex flex-col gap-6 mx-4">
+                <SidebarSection title="DreamStudio App" />
+                <Button tittle="+ Neuen Space anlegen" />
             </div>
         </div>
     )

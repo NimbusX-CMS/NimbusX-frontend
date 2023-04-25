@@ -1,0 +1,16 @@
+.parent {
+    position: relative;
+}
+
+.background {
+    opacity: 0;
+    @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10
+}
+
+.background_selected {
+    @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10 opacity-50
+}
+
+button:hover .background {
+    opacity: 0.5;
+}
