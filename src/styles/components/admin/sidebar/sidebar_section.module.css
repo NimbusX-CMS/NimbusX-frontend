@@ -9,10 +9,3 @@ button:hover .background {
 .background_selected {
     @apply bg-admin-primary-background w-full h-full absolute top-0 left-0 rounded-xl z-10
 }
-
-.selectable_text {
-    @apply text-left text-admin-text-secondary hover:text-admin-text
-}
-.selected_text {
-    @apply text-left font-bold
-}
