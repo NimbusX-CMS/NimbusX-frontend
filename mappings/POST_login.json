@@ -1,0 +1,21 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "/login",
+    "bodyPatterns": [ {
+      "equalToJson": {
+        "email": "max.mustermann@mail.de",
+        "password": "password"
+      }
+    }]
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "session": "supersecretusersessionkey"
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

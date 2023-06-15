@@ -4,8 +4,10 @@ import SidebarAccount from "@/components/admin/sidebar/sidebar_account";
 import {ReactElement} from "react";
 import SidebarSpace from "@/components/admin/sidebar/sidebar_space";
 import Link from "next/link";
+import {User} from "@/models/user";
+import {getUserRole} from "@/util/user_util";
 
-export default function Sidebar({spaces}: SidebarProps) {
+export default function Sidebar({user, spaces}: SidebarProps) {
     spaces.forEach(space => {
         if (space!.type !== SidebarSpace) {
             throw new Error('Elements in spaces should be of type "SidebarSpace".')
@@ -26,16 +28,21 @@ export default function Sidebar({spaces}: SidebarProps) {
             </div>
 
             <div className="flex flex-col justify-end gap-1 mb-5 h-full">
-                <span className="mb-2 font-extrabold text-admin-text-secondary">EINSTELLUNGEN</span>
-                <SidebarSelect type={SideBarSelectType.USER}/>
-                <SidebarSelect type={SideBarSelectType.WEBHOOK}/>
+                {user.isInstanceAdmin &&
+                    <>
+                        <span className="mb-2 font-extrabold text-admin-text-secondary">EINSTELLUNGEN</span>
+                        <SidebarSelect type={SideBarSelectType.USER}/>
+                        <SidebarSelect type={SideBarSelectType.WEBHOOK}/>
+                    </>
+                }
             </div>
 
-            <SidebarAccount displayName="Alexander Aust" role="Super Admin"/>
+            <SidebarAccount displayName={user.displayName} role={getUserRole(user)}/>
         </div>
     )
 }
 
 type SidebarProps = {
+    user: User
     spaces: Array<ReactElement>
 }

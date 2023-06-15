@@ -6,9 +6,11 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "wiremock": "docker run -it --rm -p 8080:8080 --name wiremock -v $PWD/mappings:/home/wiremock/mappings wiremock/wiremock:2.35.0 --enable-stub-cors"
   },
   "dependencies": {
+    "@headlessui/react": "^1.7.15",
     "@types/node": "18.15.11",
     "@types/react": "18.0.37",
     "@types/react-dom": "18.0.11",

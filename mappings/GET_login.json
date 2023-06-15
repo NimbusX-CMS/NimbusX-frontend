@@ -1,0 +1,23 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/login",
+    "cookies": {
+      "session": {
+        "matches": "supersecretusersessionkey"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "displayName": "Max Mustermann",
+      "email": "max.mustermann@mail.de",
+      "isInstanceAdmin": true,
+      "isOrigin": true
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
