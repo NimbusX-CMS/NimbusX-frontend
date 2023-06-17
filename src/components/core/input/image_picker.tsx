@@ -19,7 +19,7 @@ export default function ImagePicker({title, accept}: FilePickerProps) {
     }
 
     return (
-        <div className="grid grid-cols-2 grid-rows-2">
+        <div className="grid grid-cols-2 grid-rows-2 w-[545px]">
             <div ref={previewRef} className="row-span-2 w-[256px] h-[256px] bg-contain bg-no-repeat bg-center"/>
             <div className="justify-self-start self-center w-[75%]">
                 {title}

@@ -22,7 +22,7 @@ export default function SidebarSelect({type, selected}: SideBarSelectProps) {
 }
 
 export enum SideBarSelectType {
-    USER= "Benutzer",
+    USER = "Benutzer",
     WEBHOOK = "Webhook"
 }
 

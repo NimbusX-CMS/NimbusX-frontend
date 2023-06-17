@@ -1,8 +1,6 @@
-import {GoCalendar, GoClock, GoFileMedia, GoMarkdown} from "react-icons/go";
-import React from "react";
-import {Md123, MdDeleteOutline, MdList, MdOutlineColorLens, MdOutlineModeEdit} from "react-icons/md";
-import {IoTextOutline} from "react-icons/io5";
 import {GoLock} from "react-icons/go";
+import React from "react";
+import {MdDeleteOutline, MdOutlineModeEdit} from "react-icons/md";
 import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import {getContentTypeDisplayData} from "@/util/content_type_util";
 
@@ -28,7 +26,8 @@ export default function ContentTypeItem({name, type, deletable}: ContentTypeItem
                     <MdOutlineModeEdit className="w-[24px] h-[24px]"/>
                 </button>
                 {(deletable ?? true)
-                    ? <button className="hover:opacity-50 ml-auto"><MdDeleteOutline className="w-[24px] h-[24px]"/></button>
+                    ? <button className="hover:opacity-50 ml-auto"><MdDeleteOutline className="w-[24px] h-[24px]"/>
+                    </button>
                     : <GoLock className="w-[21px] h-[21px]"/>
                 }
             </div>

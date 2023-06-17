@@ -23,6 +23,7 @@ export default function Login() {
         current.email = event.target.value.trim()
         setLogin(current)
     }
+
     function updatePassword(event: ChangeEvent<HTMLInputElement>) {
         let current = login
         current.password = event.target.value
@@ -35,7 +36,7 @@ export default function Login() {
         let session: string
         try {
             session = await AuthRepository.login(login)
-            document.cookie=`session=${session};`
+            document.cookie = `session=${session};`
             await router.push("/")
         } catch (error) {
             if (error instanceof UnauthorizedError) {

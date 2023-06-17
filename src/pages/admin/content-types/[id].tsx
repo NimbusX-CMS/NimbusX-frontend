@@ -16,11 +16,15 @@ export default function SpaceSettings({
                                           spaces,
                                           initCurrentSpace
                                       }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+
     const [current, setCurrent] = useState<Space>(initCurrentSpace)
+    const [isOverlayOpen, setOverlayOpen] = useState(true)
 
     return (
         <main className="flex min-h-screen">
-            <ContentTypeOverlay/>
+            {isOverlayOpen &&
+                <ContentTypeOverlay onClose={() => setOverlayOpen(false)}/>
+            }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
                     space.id === current.id

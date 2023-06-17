@@ -27,13 +27,15 @@ export default function SidebarSpace({space, selectedOption, imageUrl}: SidebarS
             {selected &&
                 <div className={styles.body}>
                     <div className="relative z-20 flex flex-col">
-                        <Link href={`/admin/space-settings/${space.id}`} className="p-2 pl-14 relative flex items-center gap-2"
+                        <Link href={`/admin/space-settings/${space.id}`}
+                              className="p-2 pl-14 relative flex items-center gap-2"
                               data-selected={selectedOption === SelectedOption.SPACE_SETTINGS}>
                             <MdSpaceDashboard className="z-20 w-[24px] h-[24px]"/>
                             <span className="z-20">Space Einstellungen</span>
                             <div className={styles.background}/>
                         </Link>
-                        <Link href={`/admin/content-types/${space.id}`} className="p-2 pl-14 relative flex items-center gap-2"
+                        <Link href={`/admin/content-types/${space.id}`}
+                              className="p-2 pl-14 relative flex items-center gap-2"
                               data-selected={selectedOption === SelectedOption.CONTENT_TYPES}>
                             <MdOutlineContentCopy className="z-20 w-[24px] h-[24px]"/>
                             <span className="z-20">Content Typen</span>

@@ -40,7 +40,7 @@ export async function checkBasicAdminAuth(context: GetServerSidePropsContext, on
     }
 
     const props = {user: user}
-    if(onSuccessful) {
+    if (onSuccessful) {
         await onSuccessful(props)
     }
 

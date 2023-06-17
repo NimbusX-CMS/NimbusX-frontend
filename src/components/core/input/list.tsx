@@ -18,7 +18,10 @@ export default function List({title, onChange, values}: ListProps) {
                         className="flex flex-col border-2 border-admin-text-secondary rounded-xl px-4 py-1">
                         <span className="text-admin-text-secondary text-xs">{title}</span>
                         <div className="flex items-center w-full">
-                            {selectedOption.join(", ")}
+                            {selectedOption.length === 0
+                                ? <span className="text-admin-text-secondary">None</span>
+                                : selectedOption.join(", ")
+                            }
                             {open
                                 ? <GoTriangleUp className="ml-auto"/>
                                 : <GoTriangleDown className="ml-auto"/>

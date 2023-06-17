@@ -1,7 +1,7 @@
 import {User} from "@/models/user";
 
 export function getUserRole(user: User): string {
-    if(user.isOrigin) {
+    if (user.isOrigin) {
         return "Super Admin"
     }
     if (user.isInstanceAdmin) {

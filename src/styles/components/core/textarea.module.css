@@ -1,0 +1,23 @@
+.grow {
+    display: grid;
+}
+
+.grow::after {
+    content: attr(data-replicated-value) " ";
+    white-space: pre-wrap;
+    visibility: hidden;
+}
+
+.grow > textarea {
+    resize: none;
+    overflow: hidden;
+}
+
+.grow > textarea,
+.grow::after {
+    border: 1px solid transparent;
+    padding: 0.5rem;
+    font: inherit;
+    grid-area: 1 / 1 / 2 / 2;
+    @apply outline-0 bg-transparent
+}

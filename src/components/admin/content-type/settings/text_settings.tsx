@@ -8,6 +8,7 @@ export default function TextSettings({onChange}: TextSettingsProps) {
 
     function updateMaxLength(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value
+        setMaxLength(Number(value))
 
         if (!onChange) return
         onChange({maxLength: Number(value), defaultValue: defaultValue})
@@ -24,11 +25,11 @@ export default function TextSettings({onChange}: TextSettingsProps) {
     return (
         <div className="flex flex-col gap-4">
             <TextField title="Maximale Länge" placeholder="250" onChange={updateMaxLength} type="number"/>
-            <TextField title="Standart Wert" placeholder="Default" onChange={updateDefaultValue} />
+            <TextField title="Standart Wert" placeholder="Default" onChange={updateDefaultValue}/>
         </div>
     )
 }
 
 export type TextSettingsProps = {
-    onChange?: (value: {maxLength: number, defaultValue: string}) => void
+    onChange?: (value: { maxLength: number, defaultValue: string }) => void
 }
