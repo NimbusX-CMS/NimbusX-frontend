@@ -3,9 +3,10 @@ import React from "react";
 import {MdDeleteOutline, MdOutlineModeEdit} from "react-icons/md";
 import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import {getContentTypeDisplayData} from "@/util/content_type_util";
+import {Field} from "@/models/content-type/field";
 
-export default function ContentTypeItem({name, type, deletable}: ContentTypeItemProps) {
-    const data = getContentTypeDisplayData(type)
+export default function ContentTypeItem({field}: ContentTypeItemProps) {
+    const data = getContentTypeDisplayData(ContentTypeEnum[field.type as keyof typeof ContentTypeEnum])
 
     return (
         <div className="flex items-center border-2 border-admin-text-secondary rounded-xl px-4 py-1">
@@ -15,7 +16,7 @@ export default function ContentTypeItem({name, type, deletable}: ContentTypeItem
             </div>
             <div className="flex flex-col items-center ml-10">
                 <span className="text-xs text-admin-text-secondary">Name</span>
-                <span className="text-sm">{name}</span>
+                <span className="text-sm">{field.name}</span>
             </div>
             <div className="flex flex-col items-center ml-10">
                 <span className="text-xs text-admin-text-secondary">Typ</span>
@@ -25,7 +26,7 @@ export default function ContentTypeItem({name, type, deletable}: ContentTypeItem
                 <button className="hover:opacity-50 ml-auto">
                     <MdOutlineModeEdit className="w-[24px] h-[24px]"/>
                 </button>
-                {(deletable ?? true)
+                {(field.deletable ?? true)
                     ? <button className="hover:opacity-50 ml-auto"><MdDeleteOutline className="w-[24px] h-[24px]"/>
                     </button>
                     : <GoLock className="w-[21px] h-[21px]"/>
@@ -36,7 +37,5 @@ export default function ContentTypeItem({name, type, deletable}: ContentTypeItem
 }
 
 type ContentTypeItemProps = {
-    name: string
-    type: ContentTypeEnum
-    deletable?: boolean
+    field: Field
 }

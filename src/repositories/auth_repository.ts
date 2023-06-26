@@ -1,11 +1,12 @@
 import {LoginForm} from "@/models/login_form";
 import UnauthorizedError from "@/exceptions/unauthorized";
 import InternalServerError from "@/exceptions/internal_server_error";
+import * as Constants from "@/constants";
 
 export default class AuthRepository {
 
     public static async login(form: LoginForm): Promise<string> {
-        const response = await fetch("http://localhost:8080/login", {
+        const response = await fetch(`${Constants.CONTENT_MANAGING_SERVICE}/login`, {
             method: "POST",
             body: JSON.stringify(form)
         })

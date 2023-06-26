@@ -2,6 +2,7 @@ import {Space} from "@/models/space/space";
 import UnauthorizedError from "@/exceptions/unauthorized";
 import InternalServerError from "@/exceptions/internal_server_error";
 import NotFoundError from "@/exceptions/not_found";
+import * as Constants from "@/constants";
 
 export default class SpaceRepository {
     public static async getAll(session?: string): Promise<Array<Space>> {
@@ -10,7 +11,7 @@ export default class SpaceRepository {
             headers = {"Cookie": `session=${session}`}
         }
 
-        const response = await fetch("http://localhost:8080/spaces", {
+        const response = await fetch(`${Constants.CONTENT_SERVING_SERVICE}/spaces`, {
             credentials: "include",
             headers: headers
         })
@@ -33,7 +34,7 @@ export default class SpaceRepository {
             headers = {"Cookie": `session=${session}`}
         }
 
-        const response = await fetch(`http://localhost:8080/space/${id}`, {
+        const response = await fetch(`${Constants.CONTENT_SERVING_SERVICE}/space/${id}`, {
             credentials: "include",
             headers: headers
         })
@@ -56,7 +57,7 @@ export default class SpaceRepository {
             headers = {"Cookie": `session=${session}`}
         }
 
-        const response = await fetch(`http://localhost:8080/space/${id}`, {
+        const response = await fetch(`${Constants.CONTENT_SERVING_SERVICE}/space/${id}`, {
             credentials: "include",
             headers: headers,
             body: JSON.stringify(space),

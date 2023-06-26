@@ -95,12 +95,12 @@ export default function SpaceSettings({
                 {isUnsaved &&
                     <>
                         <div
-                            className="fixed flex items-center gap-4 px-4 w-[75%] h-[5vh] bg-red-600 z-50 rounded-xl top-5 ml-9">
+                            className="fixed flex items-center gap-4 px-4 w-[75%] h-[5vh] bg-admin-secondary-background z-50 rounded-xl top-5 ml-9">
                             Achtung! Ungespeicherte Inhalte {'  '}
                             <button className="hover:underline ml-auto"
-                                    onClick={() => setCurrent(initCurrentSpace)}>Reset
+                                    onClick={() => setCurrent(initCurrentSpace)}>Zurücksetzen
                             </button>
-                            <PrimaryButton tittle="Speichern" classname="w-[8%] h-[80%]" onClick={submit}/>
+                            <PrimaryButton tittle="Speichern" classname="max-w-[100px] h-[80%] bg-green-600 hover:bg-green-5003" onClick={submit}/>
                         </div>
                         <div className="h-[5vh]"/>
                     </>

@@ -1,0 +1,31 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/sample-webseite/sample"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "name": "sample",
+      "preview": "",
+      "multilanguage": true,
+      "singleType": false,
+      "allowedMethods": [
+        "GET"
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "required": true,
+          "deletable": false,
+          "type": "TEXT",
+          "maxLength": -1,
+          "defaultText": ""
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

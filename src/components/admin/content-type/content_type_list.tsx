@@ -12,7 +12,10 @@ export default function ContentTypeList({onChange}: ContentTypeListProps) {
         if (!onChange) return
         onChange(selectedOption)
         setSelectedOptionData(getContentTypeDisplayData(selectedOption))
-    }, [selectedOption, onChange])
+
+        // Also adding onChange as dependency results in a maximum update depth exceeded
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [selectedOption])
 
     return (
         <Listbox value={selectedOption} onChange={setSelectedOption}>

@@ -3,6 +3,8 @@ import {IoTextOutline} from "react-icons/io5";
 import {Md123, MdDeleteOutline, MdList, MdOutlineColorLens} from "react-icons/md";
 import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import React from "react";
+import {Field} from "@/models/content-type/field";
+import {TextField} from "@/models/content-type/fields/text_field";
 
 const itemData = new Map([
     [ContentTypeEnum.MEDIA, {name: 'Medien', icon: <GoFileMedia className="w-[24px] h-[24px]"/>, color: '#903B7E'}],

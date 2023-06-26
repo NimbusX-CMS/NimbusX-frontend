@@ -1,6 +1,6 @@
 import {Field} from "@/models/content-type/field";
 
-export type Number_field = Field & {
+export type NumberField = Field & {
     minValue: number
     maxValue: number
 }

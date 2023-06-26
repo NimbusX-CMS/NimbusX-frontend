@@ -1,11 +1,12 @@
 import {User} from "@/models/user";
 import UnauthorizedError from "@/exceptions/unauthorized";
 import InternalServerError from "@/exceptions/internal_server_error";
+import * as Constants from "@/constants";
 
 export default class UserRepository {
 
     public static async getUser(session: string): Promise<User> {
-        const response = await fetch("http://localhost:8080/login", {
+        const response = await fetch(`${Constants.CONTENT_MANAGING_SERVICE}/login`, {
             method: "GET",
             headers: {
                 "Cookie": `session=${session}`

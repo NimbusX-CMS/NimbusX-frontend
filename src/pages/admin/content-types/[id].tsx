@@ -10,20 +10,34 @@ import ContentTypeHolder from "@/components/admin/content-type/content_type_hold
 import PrimaryButton from "@/components/core/input/primary_button";
 import {getCookieValue} from "@/util/cookie_utils";
 import ContentTypeOverlay from "@/components/admin/content-type/content_type_overlay";
+import ContentRepository from "@/repositories/content_repository";
+import {ContentType} from "@/models/content-type/content_type";
+import _ from "lodash";
+import {useStateWithField} from "@/hooks/use_state_with_field";
 
 export default function SpaceSettings({
                                           user,
                                           spaces,
-                                          initCurrentSpace
+                                          initCurrentSpace,
+                                          contentTypes
                                       }: InferGetServerSidePropsType<typeof getServerSideProps>) {
+    const newEmptyField = () => _.clone({
+        name: "",
+        type: "TEXT",
+        required: false,
+        deletable: true,
+        defaultText: "",
+        maxLength: -1
+    })
 
     const [current, setCurrent] = useState<Space>(initCurrentSpace)
     const [isOverlayOpen, setOverlayOpen] = useState(true)
+    const [selectedField, setSelectedField] = useStateWithField(newEmptyField())
 
     return (
         <main className="flex min-h-screen">
             {isOverlayOpen &&
-                <ContentTypeOverlay onClose={() => setOverlayOpen(false)}/>
+                <ContentTypeOverlay initField={selectedField} onClose={() => setOverlayOpen(false)}/>
             }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
@@ -36,7 +50,9 @@ export default function SpaceSettings({
                 <h2 className="text-admin-text-secondary font-bold">CONTENT TYPEN</h2>
                 <TextField title="Suchen" placeholder="Deinen Suchtext..."/>
                 <div className="w-full">
-                    <ContentTypeHolder/>
+                    {contentTypes.map((type: ContentType) =>
+                        <ContentTypeHolder key={type.name} contentType={type}/>)
+                    }
                 </div>
                 <PrimaryButton tittle="+ Neuen Content Typ" classname="mt-14"/>
             </div>
@@ -50,5 +66,9 @@ export const getServerSideProps: GetServerSideProps = (context) => {
 
         props.spaces = await SpaceRepository.getAll(sessionCookie)
         props.initCurrentSpace = await SpaceRepository.get(Number(context.query.id), sessionCookie)
+
+        const contentTypeNames = await ContentRepository.getTypes("sample-webseite", sessionCookie)
+        props.contentTypes = await Promise.all(contentTypeNames.map(async (name) =>
+            await ContentRepository.getType("sample-webseite", name, sessionCookie)))
     })
 }

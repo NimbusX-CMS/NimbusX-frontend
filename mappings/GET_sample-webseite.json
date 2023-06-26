@@ -1,0 +1,15 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/sample-webseite"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": [
+      "sample"
+    ],
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

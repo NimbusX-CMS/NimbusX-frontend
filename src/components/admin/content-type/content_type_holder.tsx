@@ -5,9 +5,9 @@ import ContentTypeItem from "@/components/admin/content-type/content_type_item";
 import PrimaryButton from "@/components/core/input/primary_button";
 import List from "@/components/core/input/list";
 import {useState} from "react";
-import {ContentTypeEnum} from "@/models/enum/content_type_enum";
+import {ContentType} from "@/models/content-type/content_type";
 
-export default function ContentTypeHolder() {
+export default function ContentTypeHolder({contentType}: ContentTypeHolderProps) {
     const [open, setOpen] = useState(false)
 
     return (
@@ -15,7 +15,7 @@ export default function ContentTypeHolder() {
             {/* HEAD */}
             <button onClick={() => setOpen(!open)}
                     className="flex items-center bg-admin-text text-admin-primary-background py-3 px-2 rounded-lg w-full">
-                <span>Game</span>
+                <span>{contentType.name}</span>
                 {open
                     ? <GoTriangleUp className="ml-auto"/>
                     : <GoTriangleDown className="ml-auto"/>
@@ -26,21 +26,29 @@ export default function ContentTypeHolder() {
                 <div className="bg-admin-secondary-background p-4">
                     <div className="flex gap-4 items-start grow-0">
                         <div className="flex gap-4 w-[55%]">
-                            <TextField title="Stage URL" placeholder="https://stage.your-website.net/blog"
-                                       className="w-[50%]"/>
-                            <CheckBox title="Mehrsprachig"/>
-                            <CheckBox title="Einzelner Typ"/>
+                            <TextField title="Stage URL"
+                                       placeholder="https://stage.your-website.net/blog"
+                                       className="w-[50%]"
+                                       value={contentType.preview}/>
+                            <CheckBox title="Mehrsprachig" checked={contentType.multilanguage}/>
+                            <CheckBox title="Einzelner Typ" checked={contentType.singleType}/>
                         </div>
                         <div>
                             <List title="Erlaubte HTTP Methoden" values={["GET", "POST", "DELETE"]}/>
                         </div>
                     </div>
                     <div className="mt-4">
-                        <ContentTypeItem name="name" type={ContentTypeEnum.TEXT} deletable={false}/>
+                        {contentType.fields.map((field) => <ContentTypeItem key={field.name} field={field}/>)}
                         <PrimaryButton tittle="+ Neues Feld" classname="h-[40px] mt-24"/>
                     </div>
                 </div>
             }
         </>
     )
+}
+
+export type ContentTypeHolderProps = {
+    contentType: ContentType
+    onNewField?: () => void
+    onDeleteField?: () => void
 }
