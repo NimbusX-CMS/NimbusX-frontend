@@ -4,9 +4,9 @@ import React, {useEffect, useState} from "react";
 import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import {getContentTypeDisplayData} from "@/util/content_type_util";
 
-export default function ContentTypeList({onChange}: ContentTypeListProps) {
-    const [selectedOption, setSelectedOption] = useState(ContentTypeEnum.TEXT)
-    const [selectedOptionData, setSelectedOptionData] = useState(getContentTypeDisplayData(ContentTypeEnum.TEXT))
+export default function ContentTypeList({onChange, value}: ContentTypeListProps) {
+    const [selectedOption, setSelectedOption] = useState(value ?? ContentTypeEnum.TEXT)
+    const [selectedOptionData, setSelectedOptionData] = useState(getContentTypeDisplayData(value ?? ContentTypeEnum.TEXT))
 
     useEffect(() => {
         if (!onChange) return
@@ -16,6 +16,8 @@ export default function ContentTypeList({onChange}: ContentTypeListProps) {
         // Also adding onChange as dependency results in a maximum update depth exceeded
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [selectedOption])
+
+
 
     return (
         <Listbox value={selectedOption} onChange={setSelectedOption}>
@@ -64,4 +66,5 @@ export default function ContentTypeList({onChange}: ContentTypeListProps) {
 
 export type ContentTypeListProps = {
     onChange?: (value: ContentTypeEnum) => void
+    value?: ContentTypeEnum
 }

@@ -4,11 +4,18 @@ import CheckBox from "@/components/core/input/check_box";
 import ContentTypeItem from "@/components/admin/content-type/content_type_item";
 import PrimaryButton from "@/components/core/input/primary_button";
 import List from "@/components/core/input/list";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {ContentType} from "@/models/content-type/content_type";
+import {Field} from "@/models/content-type/field";
 
-export default function ContentTypeHolder({contentType}: ContentTypeHolderProps) {
+export default function ContentTypeHolder({initContentType, onNewField, onEdit}: ContentTypeHolderProps) {
     const [open, setOpen] = useState(false)
+
+    const [contentType, setContentType] = useState(initContentType)
+
+    function updatePreviewUrl(event: ChangeEvent<HTMLInputElement>) {
+
+    }
 
     return (
         <>
@@ -29,7 +36,8 @@ export default function ContentTypeHolder({contentType}: ContentTypeHolderProps)
                             <TextField title="Stage URL"
                                        placeholder="https://stage.your-website.net/blog"
                                        className="w-[50%]"
-                                       value={contentType.preview}/>
+                                       value={contentType.preview}
+                                       onChange={updatePreviewUrl}/>
                             <CheckBox title="Mehrsprachig" checked={contentType.multilanguage}/>
                             <CheckBox title="Einzelner Typ" checked={contentType.singleType}/>
                         </div>
@@ -37,9 +45,16 @@ export default function ContentTypeHolder({contentType}: ContentTypeHolderProps)
                             <List title="Erlaubte HTTP Methoden" values={["GET", "POST", "DELETE"]}/>
                         </div>
                     </div>
-                    <div className="mt-4">
-                        {contentType.fields.map((field) => <ContentTypeItem key={field.name} field={field}/>)}
-                        <PrimaryButton tittle="+ Neues Feld" classname="h-[40px] mt-24"/>
+                    <div className="mt-4 flex flex-col gap-2">
+                        {contentType.fields.map((field) =>
+                            <ContentTypeItem
+                                key={field.name}
+                                field={field}
+                                onEdit={() => {
+                                    if (!onEdit) return
+                                    onEdit(field)
+                                }}/>)}
+                        <PrimaryButton tittle="+ Neues Feld" classname="h-[40px] mt-24" onClick={onNewField}/>
                     </div>
                 </div>
             }
@@ -48,7 +63,8 @@ export default function ContentTypeHolder({contentType}: ContentTypeHolderProps)
 }
 
 export type ContentTypeHolderProps = {
-    contentType: ContentType
+    initContentType: ContentType
     onNewField?: () => void
+    onEdit?: (field: Field) => void
     onDeleteField?: () => void
 }

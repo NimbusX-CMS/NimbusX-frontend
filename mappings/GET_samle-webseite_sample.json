@@ -17,10 +17,33 @@
         {
           "name": "name",
           "required": true,
-          "deletable": false,
+          "editable": false,
           "type": "TEXT",
           "maxLength": -1,
           "defaultText": ""
+        },
+        {
+          "name": "BlogTitle",
+          "required": true,
+          "editable": true,
+          "type": "TEXT",
+          "maxLength": 250,
+          "defaultText": "Sample Blog Title"
+        },
+        {
+          "name": "BlogThumbnail",
+          "required": true,
+          "editable": true,
+          "type": "MEDIA",
+          "allowedTypes": [".png", ".jpeg"],
+          "differentResolution": true,
+          "defaultImage": "https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "name": "Content",
+          "required": true,
+          "editable": true,
+          "type": "MARKDOWN"
         }
       ]
     },

@@ -9,11 +9,11 @@ import TextField from "@/components/core/input/text_field";
 import ContentTypeHolder from "@/components/admin/content-type/content_type_holder";
 import PrimaryButton from "@/components/core/input/primary_button";
 import {getCookieValue} from "@/util/cookie_utils";
-import ContentTypeOverlay from "@/components/admin/content-type/content_type_overlay";
+import ContentTypeFieldOverlay from "@/components/admin/content-type/content_type_field_overlay";
 import ContentRepository from "@/repositories/content_repository";
 import {ContentType} from "@/models/content-type/content_type";
 import _ from "lodash";
-import {useStateWithField} from "@/hooks/use_state_with_field";
+import {Field} from "@/models/content-type/field";
 
 export default function SpaceSettings({
                                           user,
@@ -25,19 +25,19 @@ export default function SpaceSettings({
         name: "",
         type: "TEXT",
         required: false,
-        deletable: true,
+        editable: true,
         defaultText: "",
         maxLength: -1
     })
 
     const [current, setCurrent] = useState<Space>(initCurrentSpace)
-    const [isOverlayOpen, setOverlayOpen] = useState(true)
-    const [selectedField, setSelectedField] = useStateWithField(newEmptyField())
+    const [isOverlayOpen, setOverlayOpen] = useState(false)
+    const [selectedField, setSelectedField] = useState<Field>(newEmptyField())
 
     return (
         <main className="flex min-h-screen">
             {isOverlayOpen &&
-                <ContentTypeOverlay initField={selectedField} onClose={() => setOverlayOpen(false)}/>
+                <ContentTypeFieldOverlay initField={selectedField} onClose={() => setOverlayOpen(false)}/>
             }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
@@ -51,7 +51,16 @@ export default function SpaceSettings({
                 <TextField title="Suchen" placeholder="Deinen Suchtext..."/>
                 <div className="w-full">
                     {contentTypes.map((type: ContentType) =>
-                        <ContentTypeHolder key={type.name} contentType={type}/>)
+                        <ContentTypeHolder key={type.name} initContentType={type}
+                                           onNewField={() => {
+                                               setSelectedField(newEmptyField())
+                                               setOverlayOpen(true)
+                                           }}
+                        onEdit={(field) => {
+                            setSelectedField(field)
+                            setOverlayOpen(true)
+                        }}
+                        />)
                     }
                 </div>
                 <PrimaryButton tittle="+ Neuen Content Typ" classname="mt-14"/>

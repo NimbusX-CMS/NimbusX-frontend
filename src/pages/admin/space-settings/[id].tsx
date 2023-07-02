@@ -28,7 +28,6 @@ export default function SpaceSettings({
 
     useEffect(() => {
         setUnsaved(!_.isEqual(initCurrentSpace, current))
-        console.log("test")
     }, [current, initCurrentSpace])
 
     function changeSpaceName(event: ChangeEvent<HTMLInputElement>) {
@@ -100,7 +99,9 @@ export default function SpaceSettings({
                             <button className="hover:underline ml-auto"
                                     onClick={() => setCurrent(initCurrentSpace)}>Zurücksetzen
                             </button>
-                            <PrimaryButton tittle="Speichern" classname="max-w-[100px] h-[80%] bg-green-600 hover:bg-green-5003" onClick={submit}/>
+                            <PrimaryButton tittle="Speichern"
+                                           classname="max-w-[100px] h-[80%] bg-green-600 hover:bg-green-5003"
+                                           onClick={submit}/>
                         </div>
                         <div className="h-[5vh]"/>
                     </>

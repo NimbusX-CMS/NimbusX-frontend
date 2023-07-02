@@ -2,8 +2,8 @@ import {Listbox} from "@headlessui/react";
 import {useEffect, useState} from "react";
 import {GoCheck, GoTriangleDown, GoTriangleUp} from "react-icons/go";
 
-export default function List({title, onChange, values}: ListProps) {
-    const [selectedOption, setSelectedOption] = useState<Array<string>>([values[0]])
+export default function List({title, onChange, values, defaultSelect}: ListProps) {
+    const [selectedOption, setSelectedOption] = useState<Array<string>>(defaultSelect ?? [values[0]])
 
     useEffect(() => {
         if (!onChange) return
@@ -55,4 +55,5 @@ type ListProps = {
     title: string
     onChange?: (value: string[]) => void
     values: string[]
+    defaultSelect?: string[]
 }

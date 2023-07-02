@@ -1,10 +1,18 @@
-import {ChangeEvent, useRef} from "react";
+import {ChangeEvent, useEffect, useRef} from "react";
 
-export default function ImagePicker({title, accept}: FilePickerProps) {
+export default function ImagePicker({title, accept, defaultImage, onChange}: FilePickerProps) {
 
     const previewRef = useRef<HTMLImageElement>(null)
 
+    useEffect(() => {
+        previewRef.current!.style.backgroundImage = `url('${defaultImage}')`
+    }, [defaultImage])
+
     function handleFileInput(event: ChangeEvent<HTMLInputElement>) {
+        if (onChange) {
+            onChange(event)
+        }
+
         const files = event.target.files
         if (files === null) {
             return
@@ -38,4 +46,6 @@ export default function ImagePicker({title, accept}: FilePickerProps) {
 type FilePickerProps = {
     title: string
     accept: string
+    defaultImage?: string
+    onChange?: (event: ChangeEvent<HTMLInputElement>) => void
 }

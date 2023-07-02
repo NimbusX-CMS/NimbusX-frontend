@@ -1,6 +1,6 @@
-export type Field = {
+export interface Field {
     name: string
     required: boolean
-    deletable: boolean
+    editable: boolean
     type: string
 }
