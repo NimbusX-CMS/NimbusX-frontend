@@ -1,23 +1,43 @@
 {
-  "request": {
-    "method": "GET",
-    "url": "/login",
-    "cookies": {
-      "session": {
-        "matches": "supersecretusersessionkey"
+  "mappings": [
+    {
+      "scenarioName": "Unauthorized get login",
+      "requiredScenarioState": "Started",
+      "request": {
+        "method": "GET",
+        "url": "/login"
+      },
+      "response": {
+        "status": 401,
+        "headers": {
+          "Content-Type": "application/json"
+        }
+      }
+    },
+    {
+      "scenarioName": "Get login",
+      "requiredScenarioState": "Started",
+      "request": {
+        "method": "GET",
+        "url": "/login",
+        "cookies": {
+          "session": {
+            "matches": "supersecretusersessionkey"
+          }
+        }
+      },
+      "response": {
+        "status": 200,
+        "jsonBody": {
+          "displayName": "Max Mustermann",
+          "email": "max.mustermann@mail.de",
+          "isInstanceAdmin": true,
+          "isOrigin": true
+        },
+        "headers": {
+          "Content-Type": "application/json"
+        }
       }
     }
-  },
-  "response": {
-    "status": 200,
-    "jsonBody": {
-      "displayName": "Max Mustermann",
-      "email": "max.mustermann@mail.de",
-      "isInstanceAdmin": true,
-      "isOrigin": true
-    },
-    "headers": {
-      "Content-Type": "application/json"
-    }
-  }
+  ]
 }
