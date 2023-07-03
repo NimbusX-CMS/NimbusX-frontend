@@ -3,7 +3,7 @@ import TextField from "@/components/core/input/text_field";
 import ContentTypeList from "@/components/admin/content-type/content_type_list";
 import CheckBox from "@/components/core/input/check_box";
 import TextSettings from "@/components/admin/content-type/settings/text_settings";
-import {ChangeEvent, useState} from "react";
+import {ChangeEvent, useEffect, useState} from "react";
 import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import {Field} from "@/models/content-type/field";
 import MediaSettings from "@/components/admin/content-type/settings/media_settings";
@@ -14,11 +14,16 @@ import SecondaryButton from "@/components/core/input/secondary_button";
 import {TextField as TextFieldModel} from "@/models/content-type/fields/text_field";
 import _ from "lodash";
 import {MediaField} from "@/models/content-type/fields/media_field";
+import {ColorField} from "@/models/content-type/fields/color_field";
 
 export default function ContentTypeFieldOverlay({initField, onClose}: ContentTypeOverlayProps) {
 
-    const [settings, setSettings] = useState<undefined | JSX.Element>(<TextSettings/>)
+    const [settings, setSettings] = useState<undefined | JSX.Element>()
     const [field, setField] = useState<Field>(initField)
+
+    useEffect(() => {
+        updateSettings(ContentTypeEnum[initField.type as keyof typeof ContentTypeEnum])
+    }, [])
 
     function updateSettings(type: ContentTypeEnum) {
         switch (type) {
@@ -28,10 +33,12 @@ export default function ContentTypeFieldOverlay({initField, onClose}: ContentTyp
                                           onChange={value => setField({...field, ...value})}/>)
                 break
             case ContentTypeEnum.MEDIA:
-                setSettings(<MediaSettings field={field as MediaField}/>)
+                setSettings(<MediaSettings field={field as MediaField}
+                                           onChange={value => setField({...field, ...value})}/>)
                 break
             case ContentTypeEnum.COLOR:
-                setSettings(<ColorSettings/>)
+                setSettings(<ColorSettings field={field as ColorField}
+                                           onChange={value => setField({...field, ...value})}/>)
                 break
             case ContentTypeEnum.LIST:
                 setSettings(<ListSettings/>)

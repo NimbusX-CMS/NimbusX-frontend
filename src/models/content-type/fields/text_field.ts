@@ -1,6 +1,6 @@
 import {Field} from "@/models/content-type/field";
 
 export type TextField = Field & {
-    maxLength: number
+    maxLength?: number
     defaultText: string
 }

@@ -27,7 +27,7 @@ export default function SpaceSettings({
         required: false,
         editable: true,
         defaultText: "",
-        maxLength: -1
+        maxLength: undefined
     })
 
     const [current, setCurrent] = useState<Space>(initCurrentSpace)

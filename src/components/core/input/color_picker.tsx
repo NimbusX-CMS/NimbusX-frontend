@@ -23,6 +23,7 @@ export default function ColorPicker({title, placeholder, onChange}: ColorPickerP
         const input = event.target.value
         if (input.length === 0) {
             previewRef.current.style.backgroundColor = placeholder
+            setValue(input)
             return
         }
         if (input.length > 7 || !/^#[a-fA-F0-9]{0,6}$/.test(input)) {

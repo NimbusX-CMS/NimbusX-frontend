@@ -3,28 +3,22 @@ import {ChangeEvent, useEffect, useState} from "react";
 import {TextField as TextFieldModel} from "@/models/content-type/fields/text_field";
 
 export default function TextSettings({onChange, field}: TextSettingsProps) {
-    const [maxLength, setMaxLength] = useState(field?.maxLength ?? -1)
+    const [maxLength, setMaxLength] = useState(field?.maxLength)
     const [defaultValue, setDefaultValue] = useState(field?.defaultText ?? "")
 
     useEffect(() => {
-        setMaxLength(field?.maxLength ?? -1)
-        setDefaultValue(field?.defaultText ?? "")
-    }, [field])
+        if (!onChange) return
+        onChange({maxLength: Number(maxLength), defaultValue: defaultValue})
+    }, [maxLength, defaultValue])
 
     function updateMaxLength(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value
         setMaxLength(Number(value))
-
-        if (!onChange) return
-        onChange({maxLength: Number(value), defaultValue: defaultValue})
     }
 
     function updateDefaultValue(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value
         setDefaultValue(value)
-
-        if (!onChange) return
-        onChange({maxLength: maxLength, defaultValue: value})
     }
 
     return (
