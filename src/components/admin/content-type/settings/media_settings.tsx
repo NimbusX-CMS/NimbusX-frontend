@@ -1,5 +1,4 @@
 import List from "@/components/core/input/list";
-import CheckBox from "@/components/core/input/check_box";
 import ImagePicker from "@/components/core/input/image_picker";
 import {MediaField} from "@/models/content-type/fields/media_field";
 import {ChangeEvent, useEffect, useState} from "react";
@@ -12,7 +11,7 @@ export default function MediaSettings({field, onChange}: MediaSettingsProps) {
     useEffect(() => {
         if (!onChange) return
         onChange({defaultImage: defaultImage ?? "", allowedTypes, differentResolution})
-    }, [defaultImage, allowedTypes, differentResolution])
+    }, [defaultImage, allowedTypes, differentResolution, onChange])
 
     function updateDefaultImage(event: ChangeEvent<HTMLInputElement>) {
         const files = event.currentTarget.files
@@ -21,16 +20,11 @@ export default function MediaSettings({field, onChange}: MediaSettingsProps) {
         }
 
         const file = files.item(0)
-        if(file === null) {
+        if (file === null) {
             return
         }
 
         setDefaultImage(URL.createObjectURL(file.slice()))
-    }
-
-    function updateDifferentResolution(event: ChangeEvent<HTMLInputElement>) {
-        const value = Boolean(event.currentTarget.value)
-        setDifferentResolution(value)
     }
 
     return (
@@ -43,9 +37,6 @@ export default function MediaSettings({field, onChange}: MediaSettingsProps) {
                   values={[".png", ".jpeg", ".mp4"]}
                   defaultSelect={allowedTypes}
                   onChange={setAllowedTypes}/>
-            <CheckBox checked={differentResolution}
-                      title="In verschiedenen Auflösungen speichern"
-                      onChange={updateDifferentResolution}/>
         </div>
     )
 }
