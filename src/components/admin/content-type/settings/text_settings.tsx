@@ -9,7 +9,7 @@ export default function TextSettings({onChange, field}: TextSettingsProps) {
     useEffect(() => {
         if (!onChange) return
         onChange({maxLength: Number(maxLength), defaultValue: defaultValue})
-    }, [maxLength, defaultValue])
+    }, [maxLength, defaultValue, onChange])
 
     function updateMaxLength(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value

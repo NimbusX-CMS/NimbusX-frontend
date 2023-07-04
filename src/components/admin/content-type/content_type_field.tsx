@@ -5,7 +5,7 @@ import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import {getContentTypeDisplayData} from "@/util/content_type_util";
 import {Field} from "@/models/content-type/field";
 
-export default function ContentTypeItem({field, onEdit}: ContentTypeItemProps) {
+export default function ContentTypeField({field, onEdit, onDelete}: ContentTypeItemProps) {
     const data = getContentTypeDisplayData(ContentTypeEnum[field.type as keyof typeof ContentTypeEnum])
 
     return (
@@ -31,7 +31,8 @@ export default function ContentTypeItem({field, onEdit}: ContentTypeItemProps) {
                     </button>
                 }
                 {(field.editable ?? true)
-                    ? <button className="hover:opacity-50 ml-auto"><MdDeleteOutline className="w-[24px] h-[24px]"/>
+                    ? <button className="hover:opacity-50 ml-auto" onClick={onDelete}>
+                        <MdDeleteOutline className="w-[24px] h-[24px]"/>
                     </button>
                     : <GoLock className="w-[21px] h-[21px]"/>
                 }
@@ -43,4 +44,5 @@ export default function ContentTypeItem({field, onEdit}: ContentTypeItemProps) {
 type ContentTypeItemProps = {
     field: Field
     onEdit?: () => void
+    onDelete?: () => void
 }

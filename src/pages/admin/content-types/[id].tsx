@@ -32,12 +32,19 @@ export default function SpaceSettings({
 
     const [current, setCurrent] = useState<Space>(initCurrentSpace)
     const [isOverlayOpen, setOverlayOpen] = useState(false)
+    const [editing, isEditing] = useState(false)
     const [selectedField, setSelectedField] = useState<Field>(newEmptyField())
+
+    function submit() {
+
+    }
 
     return (
         <main className="flex min-h-screen">
             {isOverlayOpen &&
-                <ContentTypeFieldOverlay initField={selectedField} onClose={() => setOverlayOpen(false)}/>
+                <ContentTypeFieldOverlay initField={selectedField}
+                                         onClose={() => setOverlayOpen(false)}
+                                         edit={editing}/>
             }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
@@ -55,11 +62,13 @@ export default function SpaceSettings({
                                            onNewField={() => {
                                                setSelectedField(newEmptyField())
                                                setOverlayOpen(true)
+                                               isEditing(false)
                                            }}
-                        onEdit={(field) => {
-                            setSelectedField(field)
-                            setOverlayOpen(true)
-                        }}
+                                           onEdit={(field) => {
+                                               setSelectedField(field)
+                                               setOverlayOpen(true)
+                                               isEditing(true)
+                                           }}
                         />)
                     }
                 </div>

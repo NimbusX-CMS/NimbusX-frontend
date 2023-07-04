@@ -9,7 +9,7 @@ export function NumberSettings({field, onChange}: NumberSettingsProps) {
     useEffect(() => {
         if (!onChange) return
         onChange({minValue, maxValue})
-    }, [minValue, maxValue])
+    }, [minValue, maxValue, onChange])
 
     function updateMinValue(event: ChangeEvent<HTMLInputElement>) {
         const value = event.target.value

@@ -16,14 +16,14 @@ import _ from "lodash";
 import {MediaField} from "@/models/content-type/fields/media_field";
 import {ColorField} from "@/models/content-type/fields/color_field";
 
-export default function ContentTypeFieldOverlay({initField, onClose}: ContentTypeOverlayProps) {
+export default function ContentTypeFieldOverlay({initField, onClose, edit}: ContentTypeOverlayProps) {
 
     const [settings, setSettings] = useState<undefined | JSX.Element>()
     const [field, setField] = useState<Field>(initField)
 
     useEffect(() => {
         updateSettings(ContentTypeEnum[initField.type as keyof typeof ContentTypeEnum])
-    }, [])
+    }, [initField.type])
 
     function updateSettings(type: ContentTypeEnum) {
         switch (type) {
@@ -70,7 +70,8 @@ export default function ContentTypeFieldOverlay({initField, onClose}: ContentTyp
                     <ImCross className="w-[32px] h-[32px] hover:opacity-75"/>
                 </button>
                 <div className="flex flex-col gap-4 m-8 w-[25%]">
-                    <h2 className="text-admin-text-secondary font-bold my-4">NEUER CONTENT TYP</h2>
+                    <h2 className="text-admin-text-secondary font-bold my-4">
+                        {edit ? "CONTENT TYP BEARBEITEN" : "NEUER CONTENT TYP"}</h2>
                     <TextField title="Name" placeholder="your-content-type" onChange={updateName} value={field.name}/>
                     <ContentTypeList onChange={updateSettings}
                                      value={ContentTypeEnum[field.type as keyof typeof ContentTypeEnum]}/>
@@ -83,7 +84,7 @@ export default function ContentTypeFieldOverlay({initField, onClose}: ContentTyp
                     </div>
                 }
                 <div className="sticky self-end right-4 bottom-4 flex gap-4 w-[20%] mt-auto ml-auto ">
-                    <PrimaryButton tittle="Speichern"/>
+                    <PrimaryButton tittle={edit ? "Speichern" : "Anlegen"}/>
                     <SecondaryButton tittle="Abbrechen" onClick={onClose}/>
                 </div>
             </div>
@@ -94,4 +95,5 @@ export default function ContentTypeFieldOverlay({initField, onClose}: ContentTyp
 export type ContentTypeOverlayProps = {
     initField: Field
     onClose?: () => void
+    edit?: boolean
 }
