@@ -19,7 +19,7 @@ export default function SpaceSettings({
                                           user,
                                           spaces,
                                           initCurrentSpace,
-                                          contentTypes
+                                          initContentTypes
                                       }: InferGetServerSidePropsType<typeof getServerSideProps>) {
     const newEmptyField = () => _.clone({
         name: "",
@@ -34,6 +34,24 @@ export default function SpaceSettings({
     const [isOverlayOpen, setOverlayOpen] = useState(false)
     const [editing, isEditing] = useState(false)
     const [selectedField, setSelectedField] = useState<Field>(newEmptyField())
+    const [selectedTypeIndex, setSelectedTypeIndex] = useState<number | undefined>(undefined)
+    const [contentTypes, setContentTypes] = useState<Array<ContentType>>(initContentTypes)
+
+    function updateField(field: Field, type?: ContentType) {
+        if (selectedTypeIndex === undefined) {
+
+            return
+        }
+
+        const updatedTypes = _.cloneDeep(contentTypes)
+        const updatedType: ContentType = updatedTypes[selectedTypeIndex]
+        updatedType.fields[updatedType.fields.findIndex((v: Field) => v.name === field.name)] = field
+        console.log(field)
+        updatedTypes[selectedTypeIndex] = updatedType
+        setContentTypes(updatedTypes)
+        console.log(updatedTypes)
+        setOverlayOpen(false)
+    }
 
     function submit() {
 
@@ -44,7 +62,9 @@ export default function SpaceSettings({
             {isOverlayOpen &&
                 <ContentTypeFieldOverlay initField={selectedField}
                                          onClose={() => setOverlayOpen(false)}
-                                         edit={editing}/>
+                                         edit={editing}
+                                         onSave={updateField}
+                                         initType={selectedTypeIndex ? contentTypes[selectedTypeIndex] : undefined}/>
             }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
@@ -63,11 +83,13 @@ export default function SpaceSettings({
                                                setSelectedField(newEmptyField())
                                                setOverlayOpen(true)
                                                isEditing(false)
+                                               setSelectedTypeIndex(undefined)
                                            }}
                                            onEdit={(field) => {
                                                setSelectedField(field)
                                                setOverlayOpen(true)
                                                isEditing(true)
+                                               setSelectedTypeIndex(contentTypes.findIndex((v: ContentType) => v.name === type.name))
                                            }}
                         />)
                     }
@@ -86,7 +108,7 @@ export const getServerSideProps: GetServerSideProps = (context) => {
         props.initCurrentSpace = await SpaceRepository.get(Number(context.query.id), sessionCookie)
 
         const contentTypeNames = await ContentRepository.getTypes("sample-webseite", sessionCookie)
-        props.contentTypes = await Promise.all(contentTypeNames.map(async (name) =>
+        props.initContentTypes = await Promise.all(contentTypeNames.map(async (name) =>
             await ContentRepository.getType("sample-webseite", name, sessionCookie)))
     })
 }

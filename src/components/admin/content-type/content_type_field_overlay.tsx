@@ -15,8 +15,9 @@ import {TextField as TextFieldModel} from "@/models/content-type/fields/text_fie
 import _ from "lodash";
 import {MediaField} from "@/models/content-type/fields/media_field";
 import {ColorField} from "@/models/content-type/fields/color_field";
+import {ContentType} from "@/models/content-type/content_type";
 
-export default function ContentTypeFieldOverlay({initField, onClose, edit}: ContentTypeOverlayProps) {
+export default function ContentTypeFieldOverlay({initField, initType, onClose, edit, onSave}: ContentTypeOverlayProps) {
 
     const [settings, setSettings] = useState<undefined | JSX.Element>()
     const [field, setField] = useState<Field>(initField)
@@ -26,9 +27,17 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit}: Cont
     }, [initField.type])
 
     function updateSettings(type: ContentTypeEnum) {
+        const updatedField: Field = {
+            type: field.type,
+            name: field.name,
+            editable: field.editable,
+            required: field.required
+        }
+        updatedField.type = ContentTypeEnum[type]
+        setField(updatedField)
+
         switch (type) {
             case ContentTypeEnum.TEXT:
-                console.log(field)
                 setSettings(<TextSettings field={field as TextFieldModel}
                                           onChange={value => setField({...field, ...value})}/>)
                 break
@@ -50,13 +59,13 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit}: Cont
     }
 
     function updateName(event: ChangeEvent<HTMLInputElement>) {
-        const updatedField: Field = _.clone(field)
+        const updatedField: Field = _.cloneDeep(field)
         updatedField.name = event.currentTarget.value
         setField(updatedField)
     }
 
     function updateRequired(event: ChangeEvent<HTMLInputElement>) {
-        const updatedField: Field = _.clone(field)
+        const updatedField: Field = _.cloneDeep(field)
         updatedField.required = Boolean(event.currentTarget.value)
         setField(updatedField)
     }
@@ -84,7 +93,10 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit}: Cont
                     </div>
                 }
                 <div className="sticky self-end right-4 bottom-4 flex gap-4 w-[20%] mt-auto ml-auto ">
-                    <PrimaryButton tittle={edit ? "Speichern" : "Anlegen"}/>
+                    <PrimaryButton tittle={edit ? "Speichern" : "Anlegen"} onClick={() => {
+                        if (!onSave) return
+                        onSave(field, initType)
+                    }}/>
                     <SecondaryButton tittle="Abbrechen" onClick={onClose}/>
                 </div>
             </div>
@@ -94,6 +106,8 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit}: Cont
 
 export type ContentTypeOverlayProps = {
     initField: Field
+    initType?: ContentType
     onClose?: () => void
     edit?: boolean
+    onSave?: (field: Field, type?: ContentType) => void
 }

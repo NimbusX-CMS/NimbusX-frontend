@@ -66,7 +66,7 @@ export default function Login() {
                         }
                     </form>
                     <span className="w-[80%] text-xs text-center mt-8">
-                        Wenn du dein Passwort verbessen hast,
+                        Wenn du dein Passwort vergessen hast,
                         melde dich bitte bei einem Instanz-Admin,
                         um es zurück setzen zu lassen.</span>
                 </div>
