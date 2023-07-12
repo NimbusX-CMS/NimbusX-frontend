@@ -8,19 +8,67 @@ import {ChangeEvent, useEffect, useState} from "react";
 import {ContentType} from "@/models/content-type/content_type";
 import {Field} from "@/models/content-type/field";
 import _ from "lodash";
+import ContentTypeFieldOverlay from "@/components/admin/content-type/content_type_field_overlay";
 
-export default function ContentTypeHolder({initContentType, onNewField, onEdit}: ContentTypeHolderProps) {
+export default function ContentTypeHolder({initContentType}: ContentTypeHolderProps) {
+
+    const newEmptyField = () => _.clone({
+        name: "",
+        type: "TEXT",
+        required: false,
+        editable: true,
+        defaultText: "",
+        maxLength: undefined
+    })
+
     const [open, setOpen] = useState(false)
     const [unsaved, setUnsaved] = useState(false)
-
     const [contentType, setContentType] = useState(initContentType)
+    const [selectedField, setSelectedField] = useState<Field>(newEmptyField)
+    const [isOverlayOpen, setOverlayOpen] = useState(false)
+
 
     useEffect(() => {
         setUnsaved(!_.isEqual(initContentType, contentType))
     }, [contentType, initContentType])
 
     function updatePreviewUrl(event: ChangeEvent<HTMLInputElement>) {
+        const updatedType = _.cloneDeep(contentType)
+        updatedType.preview = event.currentTarget.value
+        setContentType(updatedType)
+    }
 
+    function updateMultiLanguage(event: ChangeEvent<HTMLInputElement>) {
+        const updatedType = _.cloneDeep(contentType)
+        updatedType.multilanguage = event.currentTarget.checked
+        setContentType(updatedType)
+    }
+
+    function updateSingleType(event: ChangeEvent<HTMLInputElement>) {
+        const updatedType = _.cloneDeep(contentType)
+        updatedType.singleType = event.currentTarget.checked
+        setContentType(updatedType)
+    }
+
+    function updateAllowedMethods(list: string[]) {
+        console.log(list)
+        const updatedType = _.cloneDeep(contentType)
+        updatedType.allowedMethods = list
+        setContentType(updatedType)
+    }
+
+    function saveField(field: Field, create: boolean) {
+        const updatedType = _.cloneDeep(contentType)
+        if (create) {
+            updatedType.fields.push(field)
+
+        } else {
+            const index = updatedType.fields.findIndex(value => value.name == field.name)
+            updatedType.fields[index] = field
+        }
+        console.log(updatedType)
+        setContentType(updatedType)
+        setOverlayOpen(false)
     }
 
     function deleteField(field: Field) {
@@ -37,6 +85,12 @@ export default function ContentTypeHolder({initContentType, onNewField, onEdit}:
 
     return (
         <>
+            {isOverlayOpen &&
+                <ContentTypeFieldOverlay initField={selectedField}
+                                         edit={!_.isEqual(selectedField, newEmptyField())}
+                                         onClose={() => setOverlayOpen(false)}
+                                         onSave={saveField}/>
+            }
             {/* HEAD */}
             <button onClick={() => setOpen(!open)}
                     className="flex items-center bg-admin-text text-admin-primary-background py-3 px-2 rounded-lg w-full">
@@ -68,11 +122,18 @@ export default function ContentTypeHolder({initContentType, onNewField, onEdit}:
                                        className="w-[50%]"
                                        value={contentType.preview}
                                        onChange={updatePreviewUrl}/>
-                            <CheckBox title="Mehrsprachig" checked={contentType.multilanguage}/>
-                            <CheckBox title="Einzelner Typ" checked={contentType.singleType}/>
+                            <CheckBox title="Mehrsprachig"
+                                      checked={contentType.multilanguage}
+                                      onChange={updateMultiLanguage}/>
+                            <CheckBox title="Einzelner Typ"
+                                      checked={contentType.singleType}
+                                      onChange={updateSingleType}/>
                         </div>
                         <div>
-                            <List title="Erlaubte HTTP Methoden" values={["GET", "POST", "DELETE"]}/>
+                            <List title="Erlaubte HTTP Methoden"
+                                  values={["GET", "POST", "DELETE"]}
+                                  selectedValues={contentType.allowedMethods}
+                                  onChange={updateAllowedMethods}/>
                         </div>
                     </div>
                     <div className="mt-4 flex flex-col gap-2">
@@ -81,12 +142,17 @@ export default function ContentTypeHolder({initContentType, onNewField, onEdit}:
                                 key={field.name}
                                 field={field}
                                 onEdit={() => {
-                                    if (!onEdit) return
-                                    onEdit(field)
+                                    setSelectedField(field)
+                                    setOverlayOpen(true)
                                 }}
                                 onDelete={() => deleteField(field)}
                             />)}
-                        <PrimaryButton tittle="+ Neues Feld" classname="h-[40px] mt-24" onClick={onNewField}/>
+                        <PrimaryButton tittle="+ Neues Feld"
+                                       classname="h-[40px] mt-24"
+                                       onClick={() => {
+                                           setSelectedField(newEmptyField)
+                                           setOverlayOpen(true)
+                                       }}/>
                     </div>
                 </div>
             }
@@ -96,7 +162,4 @@ export default function ContentTypeHolder({initContentType, onNewField, onEdit}:
 
 export type ContentTypeHolderProps = {
     initContentType: ContentType
-    onNewField?: () => void
-    onEdit?: (field: Field) => void
-    onDeleteField?: () => void
 }

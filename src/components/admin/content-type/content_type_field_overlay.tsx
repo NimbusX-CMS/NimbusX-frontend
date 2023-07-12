@@ -15,39 +15,34 @@ import {TextField as TextFieldModel} from "@/models/content-type/fields/text_fie
 import _ from "lodash";
 import {MediaField} from "@/models/content-type/fields/media_field";
 import {ColorField} from "@/models/content-type/fields/color_field";
-import {ContentType} from "@/models/content-type/content_type";
 
-export default function ContentTypeFieldOverlay({initField, initType, onClose, edit, onSave}: ContentTypeOverlayProps) {
+export default function ContentTypeFieldOverlay({initField, onClose, edit, onSave}: ContentTypeOverlayProps) {
 
     const [settings, setSettings] = useState<undefined | JSX.Element>()
     const [field, setField] = useState<Field>(initField)
 
-    useEffect(() => {
-        updateSettings(ContentTypeEnum[initField.type as keyof typeof ContentTypeEnum])
-    }, [initField.type])
-
     function updateSettings(type: ContentTypeEnum) {
-        const updatedField: Field = {
-            type: field.type,
-            name: field.name,
-            editable: field.editable,
-            required: field.required
-        }
-        updatedField.type = ContentTypeEnum[type]
-        setField(updatedField)
+        const updatedField: Field = ContentTypeEnum[field.type as keyof typeof ContentTypeEnum] == type
+            ? field
+            : {
+                type: ContentTypeEnum[type],
+                name: field.name,
+                editable: field.editable,
+                required: field.required
+            }
 
         switch (type) {
             case ContentTypeEnum.TEXT:
                 setSettings(<TextSettings field={field as TextFieldModel}
-                                          onChange={value => setField({...field, ...value})}/>)
+                                          onChange={value => setField({...updatedField, ...value})}/>)
                 break
             case ContentTypeEnum.MEDIA:
                 setSettings(<MediaSettings field={field as MediaField}
-                                           onChange={value => setField({...field, ...value})}/>)
+                                           onChange={value => setField({...updatedField, ...value})}/>)
                 break
             case ContentTypeEnum.COLOR:
                 setSettings(<ColorSettings field={field as ColorField}
-                                           onChange={value => setField({...field, ...value})}/>)
+                                           onChange={value => setField({...updatedField, ...value})}/>)
                 break
             case ContentTypeEnum.LIST:
                 setSettings(<ListSettings/>)
@@ -71,7 +66,7 @@ export default function ContentTypeFieldOverlay({initField, initType, onClose, e
     }
 
     return (
-        <div className="absolute w-screen h-screen z-50 flex justify-center items-center">
+        <div className="fixed w-screen h-screen z-50 flex justify-center items-center top-0 left-0">
             <div className="absolute w-screen h-screen bg-admin-primary-background opacity-80 z-40"/>
             <div
                 className="absolute flex flex-col w-[90vw] h-[90vh] bg-admin-secondary-background z-50 rounded-lg overflow-y-scroll">
@@ -95,7 +90,8 @@ export default function ContentTypeFieldOverlay({initField, initType, onClose, e
                 <div className="sticky self-end right-4 bottom-4 flex gap-4 w-[20%] mt-auto ml-auto ">
                     <PrimaryButton tittle={edit ? "Speichern" : "Anlegen"} onClick={() => {
                         if (!onSave) return
-                        onSave(field, initType)
+                        console.log(field)
+                        onSave(field, !edit)
                     }}/>
                     <SecondaryButton tittle="Abbrechen" onClick={onClose}/>
                 </div>
@@ -106,8 +102,7 @@ export default function ContentTypeFieldOverlay({initField, initType, onClose, e
 
 export type ContentTypeOverlayProps = {
     initField: Field
-    initType?: ContentType
     onClose?: () => void
     edit?: boolean
-    onSave?: (field: Field, type?: ContentType) => void
+    onSave?: (field: Field, create: boolean) => void
 }

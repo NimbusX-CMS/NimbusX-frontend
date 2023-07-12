@@ -9,11 +9,8 @@ import TextField from "@/components/core/input/text_field";
 import ContentTypeHolder from "@/components/admin/content-type/content_type_holder";
 import PrimaryButton from "@/components/core/input/primary_button";
 import {getCookieValue} from "@/util/cookie_utils";
-import ContentTypeFieldOverlay from "@/components/admin/content-type/content_type_field_overlay";
 import ContentRepository from "@/repositories/content_repository";
 import {ContentType} from "@/models/content-type/content_type";
-import _ from "lodash";
-import {Field} from "@/models/content-type/field";
 
 export default function SpaceSettings({
                                           user,
@@ -21,37 +18,8 @@ export default function SpaceSettings({
                                           initCurrentSpace,
                                           initContentTypes
                                       }: InferGetServerSidePropsType<typeof getServerSideProps>) {
-    const newEmptyField = () => _.clone({
-        name: "",
-        type: "TEXT",
-        required: false,
-        editable: true,
-        defaultText: "",
-        maxLength: undefined
-    })
 
     const [current, setCurrent] = useState<Space>(initCurrentSpace)
-    const [isOverlayOpen, setOverlayOpen] = useState(false)
-    const [editing, isEditing] = useState(false)
-    const [selectedField, setSelectedField] = useState<Field>(newEmptyField())
-    const [selectedTypeIndex, setSelectedTypeIndex] = useState<number | undefined>(undefined)
-    const [contentTypes, setContentTypes] = useState<Array<ContentType>>(initContentTypes)
-
-    function updateField(field: Field, type?: ContentType) {
-        if (selectedTypeIndex === undefined) {
-
-            return
-        }
-
-        const updatedTypes = _.cloneDeep(contentTypes)
-        const updatedType: ContentType = updatedTypes[selectedTypeIndex]
-        updatedType.fields[updatedType.fields.findIndex((v: Field) => v.name === field.name)] = field
-        console.log(field)
-        updatedTypes[selectedTypeIndex] = updatedType
-        setContentTypes(updatedTypes)
-        console.log(updatedTypes)
-        setOverlayOpen(false)
-    }
 
     function submit() {
 
@@ -59,13 +27,6 @@ export default function SpaceSettings({
 
     return (
         <main className="flex min-h-screen">
-            {isOverlayOpen &&
-                <ContentTypeFieldOverlay initField={selectedField}
-                                         onClose={() => setOverlayOpen(false)}
-                                         edit={editing}
-                                         onSave={updateField}
-                                         initType={selectedTypeIndex ? contentTypes[selectedTypeIndex] : undefined}/>
-            }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
                     space.id === current.id
@@ -77,21 +38,8 @@ export default function SpaceSettings({
                 <h2 className="text-admin-text-secondary font-bold">CONTENT TYPEN</h2>
                 <TextField title="Suchen" placeholder="Deinen Suchtext..."/>
                 <div className="w-full">
-                    {contentTypes.map((type: ContentType) =>
-                        <ContentTypeHolder key={type.name} initContentType={type}
-                                           onNewField={() => {
-                                               setSelectedField(newEmptyField())
-                                               setOverlayOpen(true)
-                                               isEditing(false)
-                                               setSelectedTypeIndex(undefined)
-                                           }}
-                                           onEdit={(field) => {
-                                               setSelectedField(field)
-                                               setOverlayOpen(true)
-                                               isEditing(true)
-                                               setSelectedTypeIndex(contentTypes.findIndex((v: ContentType) => v.name === type.name))
-                                           }}
-                        />)
+                    {initContentTypes.map((type: ContentType) =>
+                        <ContentTypeHolder key={type.name} initContentType={type}/>)
                     }
                 </div>
                 <PrimaryButton tittle="+ Neuen Content Typ" classname="mt-14"/>

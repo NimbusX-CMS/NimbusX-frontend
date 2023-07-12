@@ -2,25 +2,24 @@ import {Listbox} from "@headlessui/react";
 import {useEffect, useState} from "react";
 import {GoCheck, GoTriangleDown, GoTriangleUp} from "react-icons/go";
 
-export default function List({title, onChange, values, defaultSelect}: ListProps) {
-    const [selectedOption, setSelectedOption] = useState<Array<string>>(defaultSelect ?? [values[0]])
-
-    useEffect(() => {
-        if (!onChange) return
-        onChange(selectedOption)
-    }, [onChange, selectedOption])
+export default function List({title, onChange, values, selectedValues}: ListProps) {
+    function update(value: string[]) {
+        if (onChange) {
+            onChange(value)
+        }
+    }
 
     return (
-        <Listbox value={selectedOption} onChange={setSelectedOption} multiple>
+        <Listbox value={selectedValues} onChange={update} multiple>
             {({open}) => (
                 <div className="flex flex-col">
                     <Listbox.Button
                         className="flex flex-col border-2 border-admin-text-secondary rounded-xl px-4 py-1">
                         <span className="text-admin-text-secondary text-xs">{title}</span>
                         <div className="flex items-center w-full">
-                            {selectedOption.length === 0
+                            {selectedValues.length === 0
                                 ? <span className="text-admin-text-secondary">None</span>
-                                : selectedOption.join(", ")
+                                : selectedValues.join(", ")
                             }
                             {open
                                 ? <GoTriangleUp className="ml-auto"/>
@@ -55,5 +54,5 @@ type ListProps = {
     title: string
     onChange?: (value: string[]) => void
     values: string[]
-    defaultSelect?: string[]
+    selectedValues: string[]
 }

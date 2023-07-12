@@ -8,6 +8,7 @@ export default function TextSettings({onChange, field}: TextSettingsProps) {
 
     useEffect(() => {
         if (!onChange) return
+        console.log({maxLength: Number(maxLength), defaultValue: defaultValue})
         onChange({maxLength: Number(maxLength), defaultValue: defaultValue})
     }, [maxLength, defaultValue, onChange])
 
