@@ -35,7 +35,7 @@ export default function MediaSettings({field, onChange}: MediaSettingsProps) {
                          onChange={updateDefaultImage}/>
             <List title="Erlaubte Dateien"
                   values={[".png", ".jpeg", ".mp4"]}
-                  defaultSelect={allowedTypes}
+                  selectedValues={allowedTypes}
                   onChange={setAllowedTypes}/>
         </div>
     )

@@ -86,7 +86,8 @@ export default function ContentTypeHolder({initContentType}: ContentTypeHolderPr
     return (
         <>
             {isOverlayOpen &&
-                <ContentTypeFieldOverlay initField={selectedField}
+                <ContentTypeFieldOverlay parentContentType={contentType}
+                                         initField={selectedField}
                                          edit={!_.isEqual(selectedField, newEmptyField())}
                                          onClose={() => setOverlayOpen(false)}
                                          onSave={saveField}/>

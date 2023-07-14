@@ -2,7 +2,7 @@ import Sidebar from "@/components/admin/sidebar/sidebar";
 import SidebarSpace, {SelectedOption} from "@/components/admin/sidebar/sidebar_space";
 import {GetServerSideProps, InferGetServerSidePropsType} from "next";
 import {checkBasicAdminAuth} from "@/util/page_auth_util";
-import {useState} from "react";
+import {ChangeEvent, useState} from "react";
 import SpaceRepository from "@/repositories/space_repository";
 import {Space} from "@/models/space/space";
 import TextField from "@/components/core/input/text_field";
@@ -11,6 +11,9 @@ import PrimaryButton from "@/components/core/input/primary_button";
 import {getCookieValue} from "@/util/cookie_utils";
 import ContentRepository from "@/repositories/content_repository";
 import {ContentType} from "@/models/content-type/content_type";
+import ContentTypeOverlay from "@/components/admin/content-type/content_type_overlay";
+import {TextField as TextFieldModel} from "@/models/content-type/fields/text_field";
+import _ from "lodash";
 
 export default function SpaceSettings({
                                           user,
@@ -20,6 +23,32 @@ export default function SpaceSettings({
                                       }: InferGetServerSidePropsType<typeof getServerSideProps>) {
 
     const [current, setCurrent] = useState<Space>(initCurrentSpace)
+    const [allContentTypes, setAllContentTypes] = useState<Array<ContentType>>(initContentTypes)
+    const [contentTypes, setContentTypes] = useState<Array<ContentType>>(initContentTypes)
+    const [isOverlayOpen, setOverlayOpen] = useState(false)
+
+    function updateSearch(event: ChangeEvent<HTMLInputElement>) {
+        const filteredType = allContentTypes.filter(value => value.name.includes(event.currentTarget.value))
+        setContentTypes(filteredType)
+    }
+
+    function addContentType(name: string) {
+        setOverlayOpen(false)
+        const updatedContentTypes = _.cloneDeep(allContentTypes)
+        updatedContentTypes.push({
+            name: name, singleType: false, fields: [{
+                name: "name",
+                required: true,
+                editable: false,
+                type: "TEXT",
+                maxLength: -1,
+                defaultText: ""
+            } as TextFieldModel], allowedMethods: ["GET"], multilanguage: false, preview: ""
+        })
+        console.log(updatedContentTypes)
+        setAllContentTypes(updatedContentTypes)
+        setContentTypes(updatedContentTypes)
+    }
 
     function submit() {
 
@@ -27,6 +56,11 @@ export default function SpaceSettings({
 
     return (
         <main className="flex min-h-screen">
+            {isOverlayOpen &&
+                <ContentTypeOverlay contentTypes={allContentTypes}
+                                    onClose={() => setOverlayOpen(false)}
+                                    onSave={addContentType}/>
+            }
             <Sidebar user={user} spaces={
                 spaces.map((space: Space) => (
                     space.id === current.id
@@ -36,13 +70,13 @@ export default function SpaceSettings({
             }/>
             <div className="flex flex-col gap-2 p-9 ml-[20%] w-full">
                 <h2 className="text-admin-text-secondary font-bold">CONTENT TYPEN</h2>
-                <TextField title="Suchen" placeholder="Deinen Suchtext..."/>
-                <div className="w-full">
-                    {initContentTypes.map((type: ContentType) =>
+                <TextField title="Suchen" placeholder="Deinen Suchtext..." onChange={updateSearch}/>
+                <div className="w-full flex flex-col gap-2">
+                    {contentTypes.map((type: ContentType) =>
                         <ContentTypeHolder key={type.name} initContentType={type}/>)
                     }
                 </div>
-                <PrimaryButton tittle="+ Neuen Content Typ" classname="mt-14"/>
+                <PrimaryButton tittle="+ Neuen Content Typ" classname="mt-14" onClick={() => setOverlayOpen(true)}/>
             </div>
         </main>
     )

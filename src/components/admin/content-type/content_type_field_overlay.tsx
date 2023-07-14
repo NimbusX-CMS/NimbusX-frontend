@@ -3,7 +3,7 @@ import TextField from "@/components/core/input/text_field";
 import ContentTypeList from "@/components/admin/content-type/content_type_list";
 import CheckBox from "@/components/core/input/check_box";
 import TextSettings from "@/components/admin/content-type/settings/text_settings";
-import {ChangeEvent, useEffect, useState} from "react";
+import {ChangeEvent, useState} from "react";
 import {ContentTypeEnum} from "@/models/enum/content_type_enum";
 import {Field} from "@/models/content-type/field";
 import MediaSettings from "@/components/admin/content-type/settings/media_settings";
@@ -15,11 +15,20 @@ import {TextField as TextFieldModel} from "@/models/content-type/fields/text_fie
 import _ from "lodash";
 import {MediaField} from "@/models/content-type/fields/media_field";
 import {ColorField} from "@/models/content-type/fields/color_field";
+import {ContentType} from "@/models/content-type/content_type";
 
-export default function ContentTypeFieldOverlay({initField, onClose, edit, onSave}: ContentTypeOverlayProps) {
+export default function ContentTypeFieldOverlay({
+                                                    parentContentType,
+                                                    initField,
+                                                    onClose,
+                                                    edit,
+                                                    onSave
+                                                }: ContentTypeOverlayProps) {
 
     const [settings, setSettings] = useState<undefined | JSX.Element>()
     const [field, setField] = useState<Field>(initField)
+
+    const [duplicatedName, setDuplicatedName] = useState(false)
 
     function updateSettings(type: ContentTypeEnum) {
         const updatedField: Field = ContentTypeEnum[field.type as keyof typeof ContentTypeEnum] == type
@@ -54,6 +63,8 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit, onSav
     }
 
     function updateName(event: ChangeEvent<HTMLInputElement>) {
+        setDuplicatedName(false)
+
         const updatedField: Field = _.cloneDeep(field)
         updatedField.name = event.currentTarget.value
         setField(updatedField)
@@ -63,6 +74,16 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit, onSav
         const updatedField: Field = _.cloneDeep(field)
         updatedField.required = Boolean(event.currentTarget.value)
         setField(updatedField)
+    }
+
+    function save() {
+        if (parentContentType.fields.find(value => value.name === field.name)) {
+            setDuplicatedName(true)
+            return
+        }
+
+        if (!onSave) return
+        onSave(field, !edit)
     }
 
     return (
@@ -76,7 +97,16 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit, onSav
                 <div className="flex flex-col gap-4 m-8 w-[25%]">
                     <h2 className="text-admin-text-secondary font-bold my-4">
                         {edit ? "CONTENT TYP BEARBEITEN" : "NEUER CONTENT TYP"}</h2>
-                    <TextField title="Name" placeholder="your-content-type" onChange={updateName} value={field.name}/>
+                    <div className="flex flex-col">
+                        {duplicatedName &&
+                            <span className="text-sm text-red-600">Dieser Name ist bereits vergeben.</span>
+                        }
+                        <TextField title="Name"
+                                   placeholder="your-content-type"
+                                   className={duplicatedName ? "text-red-600 border-red-600" : ""}
+                                   onChange={updateName}
+                                   value={field.name}/>
+                    </div>
                     <ContentTypeList onChange={updateSettings}
                                      value={ContentTypeEnum[field.type as keyof typeof ContentTypeEnum]}/>
                     <CheckBox title="Erforderlich" onChange={updateRequired} checked={field.required}/>
@@ -88,11 +118,7 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit, onSav
                     </div>
                 }
                 <div className="sticky self-end right-4 bottom-4 flex gap-4 w-[20%] mt-auto ml-auto ">
-                    <PrimaryButton tittle={edit ? "Speichern" : "Anlegen"} onClick={() => {
-                        if (!onSave) return
-                        console.log(field)
-                        onSave(field, !edit)
-                    }}/>
+                    <PrimaryButton tittle={edit ? "Speichern" : "Anlegen"} onClick={save}/>
                     <SecondaryButton tittle="Abbrechen" onClick={onClose}/>
                 </div>
             </div>
@@ -101,6 +127,7 @@ export default function ContentTypeFieldOverlay({initField, onClose, edit, onSav
 }
 
 export type ContentTypeOverlayProps = {
+    parentContentType: ContentType
     initField: Field
     onClose?: () => void
     edit?: boolean
