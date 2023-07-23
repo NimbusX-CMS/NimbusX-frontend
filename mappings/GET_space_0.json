@@ -1,0 +1,30 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/space/0",
+    "cookies": {
+      "session": {
+        "matches": "supersecretusersessionkey"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "id": 0,
+      "name": "Sample Webseite",
+      "color1": "#576CA8",
+      "color2": "#274690",
+      "color3": "#1D1F25",
+      "color4": "#272A30",
+      "primaryLanguage": "de-DE",
+      "languages": [
+        "de-DE",
+        "en-US"
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}

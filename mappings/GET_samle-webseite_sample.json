@@ -1,0 +1,61 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/sample-webseite/sample"
+  },
+  "response": {
+    "status": 200,
+    "jsonBody": {
+      "name": "sample",
+      "preview": "",
+      "multilanguage": true,
+      "singleType": false,
+      "allowedMethods": [
+        "GET"
+      ],
+      "fields": [
+        {
+          "name": "name",
+          "required": true,
+          "editable": false,
+          "type": "TEXT",
+          "maxLength": -1,
+          "defaultText": ""
+        },
+        {
+          "name": "Title",
+          "required": true,
+          "editable": true,
+          "type": "TEXT",
+          "maxLength": 250,
+          "defaultText": "Sample Blog Title"
+        },
+        {
+          "name": "Thumbnail",
+          "required": true,
+          "editable": true,
+          "type": "MEDIA",
+          "allowedTypes": [".png", ".jpeg"],
+          "differentResolution": true,
+          "defaultImage": "https://yt3.googleusercontent.com/jdxaiUL9R7okC1RlM0XJaMiG5A67ED-UftUbZES8yR53qfjAVT15PucIE675Hc2Zr2N8yVc1Gg=s900-c-k-c0x00ffffff-no-rj"
+        },
+        {
+          "name": "Color",
+          "required": true,
+          "editable": true,
+          "type": "COLOR",
+          "defaultColor": "#88aaff"
+          },
+        {
+          "name": "Content",
+          "required": true,
+          "editable": true,
+          "type": "MARKDOWN"
+        }
+      ]
+    },
+    "headers": {
+      "Content-Type": "application/json"
+    }
+  }
+}
